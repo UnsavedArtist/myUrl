@@ -1,0 +1,29 @@
+version: "3.8"
+services:
+  api:
+    build: 
+      context: ../../shortener-api
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - MONGO_URI=mongodb://db:27017/shortener
+      - BASE_URL=http://localhost:3000
+    depends_on:
+      - db
+
+  frontend:
+    build:
+      context: ../../frontend
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+    depends_on:
+      - api
+
+  db:
+    image: mongo:6
+    container_name: url-shortener-mongo
+    ports:
+      - "27017:27017"
+
